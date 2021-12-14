@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="user7Model" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="user7Entities" annotation:LazyLoadingEnabled="true">
+    <FunctionImport Name="sp_alterdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_creatediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="version" Mode="In" Type="Int32" />
+      <Parameter Name="definition" Mode="In" Type="Binary" />
+    </FunctionImport>
+    <FunctionImport Name="sp_dropdiagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagramdefinition" ReturnType="Collection(user7Model.sp_helpdiagramdefinition_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_helpdiagrams" ReturnType="Collection(user7Model.sp_helpdiagrams_Result)">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+    </FunctionImport>
+    <FunctionImport Name="sp_renamediagram">
+      <Parameter Name="diagramname" Mode="In" Type="String" />
+      <Parameter Name="owner_id" Mode="In" Type="Int32" />
+      <Parameter Name="new_diagramname" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="sp_upgraddiagrams" />
+    <EntitySet Name="Agents" EntityType="user7Model.Agents" />
+    <EntitySet Name="ProductSale" EntityType="user7Model.ProductSale" />
+    <EntitySet Name="ProductsShort" EntityType="user7Model.ProductsShort" />
+    <EntitySet Name="sysdiagrams" EntityType="user7Model.sysdiagrams" />
+    <AssociationSet Name="FK_Agents_ProductSale" Association="user7Model.FK_Agents_ProductSale">
+      <End Role="ProductSale" EntitySet="ProductSale" />
+      <End Role="Agents" EntitySet="Agents" />
+    </AssociationSet>
+    <AssociationSet Name="FK_ProductSale_ProductsShort" Association="user7Model.FK_ProductSale_ProductsShort">
+      <End Role="ProductsShort" EntitySet="ProductsShort" />
+      <End Role="ProductSale" EntitySet="ProductSale" />
+    </AssociationSet>
+  </EntityContainer>
+  <ComplexType Name="sp_helpdiagramdefinition_Result">
+    <Property Type="Int32" Name="version" Nullable="true" />
+    <Property Type="Binary" Name="definition" Nullable="true" />
+  </ComplexType>
+  <ComplexType Name="sp_helpdiagrams_Result">
+    <Property Type="String" Name="Database" Nullable="true" MaxLength="128" />
+    <Property Type="String" Name="Name" Nullable="false" MaxLength="128" />
+    <Property Type="Int32" Name="ID" Nullable="false" />
+    <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
+    <Property Type="Int32" Name="OwnerID" Nullable="false" />
+  </ComplexType>
+  <EntityType Name="Agents">
+    <Key>
+      <PropertyRef Name="IdАгента" />
+    </Key>
+    <Property Name="IdАгента" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Тип_агента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Наименование_агента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Электроннаяпочтаагента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Телефонагента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Логотип_агента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Юридический_адрес" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Приоритет" Type="Double" />
+    <Property Name="Директор" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="ИНН" Type="Double" />
+    <Property Name="КПП" Type="Double" Nullable="false" />
+    <Property Name="IdПродукции" Type="Int32" />
+    <NavigationProperty Name="ProductSale" Relationship="user7Model.FK_Agents_ProductSale" FromRole="Agents" ToRole="ProductSale" />
+  </EntityType>
+  <EntityType Name="ProductSale">
+    <Key>
+      <PropertyRef Name="IdПродавПродукц" />
+    </Key>
+    <Property Name="IdПродавПродукц" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Продукция" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Наименование_агента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="Дата_реализации" Type="DateTime" Precision="3" />
+    <Property Name="Количество_продукции" Type="Double" />
+    <Property Name="IdПродукции" Type="Int32" />
+    <NavigationProperty Name="Agents" Relationship="user7Model.FK_Agents_ProductSale" FromRole="ProductSale" ToRole="Agents" />
+    <NavigationProperty Name="ProductsShort" Relationship="user7Model.FK_ProductSale_ProductsShort" FromRole="ProductSale" ToRole="ProductsShort" />
+  </EntityType>
+  <EntityType Name="ProductsShort">
+    <Key>
+      <PropertyRef Name="IdПродукции" />
+    </Key>
+    <Property Name="IdПродукции" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Наименование_продукции" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="C_Тип_продукции" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <Property Name="C_Артикул" Type="Double" />
+    <Property Name="C_Количество_человек_для_производства" Type="Double" />
+    <Property Name="C_Номер_цеха_производства" Type="Double" />
+    <Property Name="C_Минимальная_цена_для_агента" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="ProductSale" Relationship="user7Model.FK_ProductSale_ProductsShort" FromRole="ProductsShort" ToRole="ProductSale" />
+  </EntityType>
+  <EntityType Name="sysdiagrams">
+    <Key>
+      <PropertyRef Name="diagram_id" />
+    </Key>
+    <Property Name="name" Type="String" Nullable="false" MaxLength="128" FixedLength="false" Unicode="true" />
+    <Property Name="principal_id" Type="Int32" Nullable="false" />
+    <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="version" Type="Int32" />
+    <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
+  </EntityType>
+  <Association Name="FK_Agents_ProductSale">
+    <End Type="user7Model.ProductSale" Role="ProductSale" Multiplicity="0..1" />
+    <End Type="user7Model.Agents" Role="Agents" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductSale">
+        <PropertyRef Name="IdПродавПродукц" />
+      </Principal>
+      <Dependent Role="Agents">
+        <PropertyRef Name="IdПродукции" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_ProductSale_ProductsShort">
+    <End Type="user7Model.ProductsShort" Role="ProductsShort" Multiplicity="0..1" />
+    <End Type="user7Model.ProductSale" Role="ProductSale" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="ProductsShort">
+        <PropertyRef Name="IdПродукции" />
+      </Principal>
+      <Dependent Role="ProductSale">
+        <PropertyRef Name="IdПродукции" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
